@@ -1,4 +1,4 @@
-# Thesis_Project
+Thesis_Project
 
 #This repository contains codes for experiements in the MSc project.
 
