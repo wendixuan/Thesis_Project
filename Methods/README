@@ -1,5 +1,6 @@
 (1)'TGA' is a file of codes from the personal page of Marco Cuturi.
     These codes were used for the computation of triangular alignment kernel.
+    'tgakernel.py' is a code for SVC with triangular global alignment kernel using the code in 'TGA'
     
 (2)'anova.py' is the code for SVC with  ANOVA kernel in the benchmark experiments 
    for dataset with time series in consistent lengths.
@@ -18,5 +19,7 @@
                  (2)False, when time series have consistent lengths
               
               'Dia=True' when one want to use the simple version of s-sequential kernel proposed in the Thesis.  
+              
+              
 
   
