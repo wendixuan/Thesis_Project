@@ -1,0 +1,8 @@
+1.This file contains codes for each dataset in 6 files.
+  Inside the files, file named with (1) '*_Bag.py' is a experiment with bag of features kernel
+                                  (2) '*_Seq.py' is a experiment with sequential kernel
+                                  (3) '*_SS.py' is a experiment with s-sequential kernel
+                                  (4) '*_anova.py' is a experiment with ANOVA kernel
+                                  (5) '*_TGA.py' is a experiment with triangular global alignment kernel
+                              
+2. 'simulation_experiment.py' is the code for simulation experiments for comparing the sequential kernel and s-sequential kernel/ 
