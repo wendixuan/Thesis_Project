@@ -1,3 +1,31 @@
+
+######################
+# 
+#This code was modified basedon the code of 'Kernels for sequentially ordered data' written by F. J Kiraly and H. Oberhauser.
+#
+#############################################################
+######################
+#
+#This code can be use to do SVC with bag of features kernel, sequential kernel and a simple version of s-sequential kernel 
+#
+######################
+
+#Addition:
+#(1) small_rev():modified funtion of cumsum_rev(), which only consider the diagonal of matrix
+#(2) SquizeKernel_D(): the funtion for computing s-sequential kernel values between path 1 and path 2.
+#(3) BagSeqKernel(): the funtion for computing bag of feature kernel values between path 1 and path 2.
+#(4) BagKernelizer(): a class for computing kernel matrix with the bag of feature
+#(5) BagSVCpipeline():pipeline for Bag of feature kernel with SVC
+#(6) BagKernelXY() is a function for computing the values of bag of features kernel for two sample pf time series in consistent or inconsistent lengths.
+
+#Modifications are in:
+#(1)SeqKernelXY() is modified to be able to work on time series in inconsistent lengths 
+#   and be able to compute s-sequential kernel as well (when Dia=True).
+#(2)SeqKernelizer() is modified to be able to compute sequential kernel (Dia=False ) and s-sequential kernel(Dia=True) and be able to work with time series in inconsistent lengths (V=True)
+#   Notice that when V=True, the dataset should include the vector of original length in the last column of the 2D array.
+
+#####################
+
 import numpy as np
 from scipy.sparse.linalg import svds
 
@@ -9,13 +37,7 @@ def sqdist(X,Y):
     N = np.shape(Y)[0]
     return np.tile((X*X).sum(-1),[N,1]).T + np.tile((Y*Y).sum(-1),[M,1]) - 2*np.inner(X,Y)
 
-def small_rev(array):
-    out = np.zeros_like(array)
-    a=array[:0:-1, :0:-1]
-    if a.size>0:
-        np.fill_diagonal(a,a.diagonal().cumsum())
-    out[:-1, :-1] = a[::-1, ::-1]
-    return out
+
 
 # In[]
 # cumsum varia
@@ -29,6 +51,17 @@ def cumsum_rev(array):
     out = np.zeros_like(array)
     out[:-1, :-1] = np.cumsum(np.cumsum(array[:0:-1, :0:-1], 0), 1)[::-1, ::-1]
     return out
+
+
+#Modified funtion of cumsum_rev(), which only consider the diagonal of matrix
+def small_rev(array):
+    out = np.zeros_like(array)
+    a=array[:0:-1, :0:-1]
+    if a.size>0:
+        np.fill_diagonal(a,a.diagonal().cumsum())
+    out[:-1, :-1] = a[::-1, ::-1]
+    return out
+
     
 def cumsum_mult(array, dims):
     for dimind in dims:
@@ -122,7 +155,7 @@ def SqizeKernel(K, L, theta = 1.0, normalize = False):
         return 1 + np.sum(K*R) #outermost bracket: since i1>=1 and not i1>1 we do it outside of loop
 
 # FUNCTION SquizeKernel_D
-#  computes the sequential kernel from a sequential kernel matrix with less computation
+#  computes the values of  s-sequential kernel matrix 
 #
 # Inputs:
 #  K             the kernel matrix of increments, i.e.,
@@ -135,7 +168,7 @@ def SqizeKernel(K, L, theta = 1.0, normalize = False):
 #    defaults: theta = 1.0, normalize = False
 #
 # Output:
-#  a real number, the sequential kernel between path 1 and path 2
+#  a real number, the s-sequential kernel between path 1 and path 2
 #
 def SqizeKernel_D(K, L, theta = 1.0, normalize = False):
     #L-1 runs through loop;
@@ -155,7 +188,7 @@ def SqizeKernel_D(K, L, theta = 1.0, normalize = False):
         return 1 + np.sum(K*R) #outermost bracket: since i1>=1 and not i1>1 we do it outside of loop
 
 # FUNCTION BagKernel
-#  computes the sequential kernel from a sequential kernel matrix
+#  computes the bag of features kernel from a sequential kernel matrix
 #
 # Inputs:
 #  K             the kernel matrix of increments, i.e.,
@@ -562,6 +595,9 @@ def TimeSeriesReshaper(Xflat, numfeatures, subsample = 1, differences = True):
 #    subsample = time series is subsampled to every subsample-th time point
 #    differences = whether first differences are taken or not
 #    lowrank = whether low-rank approximations are used or not
+# New addition:
+##   V: True=time series in inconsistent length
+#    Dia: True=a simple version of s-sequential kernel False=Sequential kernel 
 #
 from sklearn.base import BaseEstimator, TransformerMixin
 
@@ -660,6 +696,17 @@ class TimeSeriesPreprocesser(BaseEstimator, TransformerMixin):
         return DataTabulator(Y)
 
 #Class Bagkernelizer
+
+# parameters:
+
+#   kernel = name of the kernel used: linear, Gauss, Laplace, poly
+#   scale = scaling constant, multiplicative to scalar product
+#   deg = degree, for polynomial kernel
+#    numfeatures = number of features per time point, for internal reshaping
+#    subsample = time series is subsampled to every subsample-th time point
+#    differences = whether first differences are taken or not
+#   V: True=time series in inconsistent length
+
 class BagKernelizer(BaseEstimator, TransformerMixin):
     def __init__(self,kernel = 'linear', 
                  scale = 1, deg = 2, X=0,V=False,
