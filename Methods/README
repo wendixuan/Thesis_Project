@@ -1,16 +1,22 @@
-(1)'TGA' is a file of codes from the pensonal page of Marco Cuturi.
-    These codes were used for the computaion of triangular alignment kerenl.
+(1)'TGA' is a file of codes from the personal page of Marco Cuturi.
+    These codes were used for the computation of triangular alignment kernel.
     
-(2)'anova.py' is the code for computing ANOVA kernel in the benchmark experiments for dataset with time series in consistent lengths.
-'anova_Mutil.py' is the code for computing ANOVA kernel in the benchmark experiments for dataset with time series in inconsistent lengths.
-
-(3)'kernels.py' is a modified version of codes for Sequential kernel of the article 'Kernels for sequentially ordered data' written 
-   by F. J Kiraly and H. Oberhauser.
-
-   'kernels.py' contains codes for the bag of features kernel, sequential kernel and s-sequential kernel for time series in consistent 
-   length or inconsistent lengths.
+(2)'anova.py' is the code for computing ANOVA kernel in the benchmark experiments 
+   for dataset with time series in consistent lengths.
    
-   Note that: 'V' in the SeqKernelizer() and BagKernelizer() should be set to be (1)True, when time series have inconsistent lengths
-                                                                                (2)False, when time series have consistent lengths
-              'Dia=True' when one want to use the simple version of s-squential kernel proposed in the Thesis.  
+   'anova_Mutil.py' is the code for computing ANOVA kernel in the benchmark experiments 
+   for dataset with time series in inconsistent lengths.
+
+(3)'kernels.py' is a modified version of codes for Sequential kernel of the article 
+   'Kernels for sequentially ordered data' written by F. J Kiraly and H. Oberhauser.
+
+   'kernels.py' contains codes for the bag of features kernel, sequential kernel 
+    and s-sequential kernel for time series in consistent length or inconsistent lengths.
+   
+   Note that: 'V' in the SeqKernelizer() and BagKernelizer() should be set to be 
+                 (1)True, when time series have inconsistent lengths
+                 (2)False, when time series have consistent lengths
+              
+              'Dia=True' when one want to use the simple version of s-sequential kernel proposed in the Thesis.  
+
   
