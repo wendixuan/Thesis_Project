@@ -1,12 +1,15 @@
 import global_align as ga
 import numpy as np
 from sklearn import preprocessing
+
+# FUNCTION DataTabulator(X) from codes of 'Kernels for sequentially ordered data' written by F. J Kiraly and H. Oberhauser
 def DataTabulator(X):
     
     Xshape = np.shape(X)
         
     return np.reshape(X,(Xshape[0],np.prod(Xshape[1:])))
-
+# FUNCTION TimeSeriesReshaper(X) from codes of 'Kernels for sequentially ordered data' written by F. J Kiraly and H. Oberhauser
+# transform data from 2D to 3D
 def TimeSeriesReshaper(Xflat, numfeatures, subsample = 1, differences = False):
     flatXshape = np.shape(Xflat)
     Xshape = (flatXshape[0],numfeatures,flatXshape[1]/numfeatures)        
@@ -19,7 +22,7 @@ def TimeSeriesReshaper(Xflat, numfeatures, subsample = 1, differences = False):
 
 
 
-##Compute cross-matrix
+##Compute cross-matrix with TGA kernel 
 def TGAKernelXY(X,Y,sigma=0.1,triangular=10):
 
     N = np.shape(X)[0]   
@@ -36,7 +39,17 @@ def TGAKernelXY(X,Y,sigma=0.1,triangular=10):
     return KSeq
 
 from sklearn.base import BaseEstimator, TransformerMixin
-#Class Bagkernelizer
+#Class TGAkernelizer: 
+
+# parameters:
+
+#   kernel = name of the kernel used: linear, Gauss, Laplace, poly
+#   sigma = scaling constant of the primary kernel funtion
+#    numfeatures = number of features per time point, for internal reshaping
+#    subsample = time series is subsampled to every subsample-th time point
+#    differences = whether first differences are taken or not
+#    triangular= parametere T which decide the alignment 
+
 class TGAKernelizer(BaseEstimator, TransformerMixin):
     def __init__(self,sigma=0.1,triangular=0.25, X = np.zeros((1,2)), 
                  numfeatures = 2, subsample = 1, differences =False
