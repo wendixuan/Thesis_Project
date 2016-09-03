@@ -1,3 +1,8 @@
+#######
+#
+#This is code for SVC with triangular global alignment  kernel
+#
+######
 import global_align as ga
 import numpy as np
 from sklearn import preprocessing
