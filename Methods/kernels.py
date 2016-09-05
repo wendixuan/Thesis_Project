@@ -586,7 +586,7 @@ def TimeSeriesReshaper(Xflat, numfeatures, subsample = 1, differences = True):
 #   Level = cut-off degree
 #   theta = scaling factor
 #  kernel, scale, deg: parameter for the primary kernel
-#   kernel = name of the kernel used: linear, Gauss, Laplace, poly
+#   kernel = name of the kernel used: linear, Gauss, Laplace, poly, GA(one type of Gaussian kernel)
 #   scale = scaling constant, multiplicative to scalar product
 #   deg = degree, for polynomial kernel
 #  subsample, numfeatures, differences:
@@ -699,7 +699,7 @@ class TimeSeriesPreprocesser(BaseEstimator, TransformerMixin):
 
 # parameters:
 
-#   kernel = name of the kernel used: linear, Gauss, Laplace, poly
+#   kernel = name of the kernel used: linear, Gauss, Laplace, poly,GA(one type of Gaussian kernel)
 #   scale = scaling constant, multiplicative to scalar product
 #   deg = degree, for polynomial kernel
 #    numfeatures = number of features per time point, for internal reshaping
