@@ -1,17 +1,18 @@
 
 import numpy as np
 
-
+#function for a distance between two path
 def sqdist(X,Y):
     M = np.shape(X)[0]
     N = np.shape(Y)[0]
     return np.tile((X*X).sum(-1),[N,1]).T + np.tile((Y*Y).sum(-1),[M,1]) - 2*np.inner(X,Y)
+#Reshape the dataset to be 2D
 def DataTabulator(X):
     
     Xshape = np.shape(X)
         
     return np.reshape(X,(Xshape[0],np.prod(Xshape[1:])))
-
+#Reshape dataset to be 3D
 def TimeSeriesReshaper(Xflat, numfeatures, subsample = 1, differences = True):
     flatXshape = np.shape(Xflat)
     Xshape = (flatXshape[0],numfeatures,flatXshape[1]/numfeatures)        
@@ -21,10 +22,10 @@ def TimeSeriesReshaper(Xflat, numfeatures, subsample = 1, differences = True):
         return np.diff(X)
     else:    
         return X
-
+#a base kernel of ANOVA kernel
 def kGA(x,y,scale): 
     return np.exp(-(sqdist(x,y)/(2*(scale**2))+np.log(2-np.exp(-sqdist(x,y)/(2*(scale**2))))))
-    
+ #compute a ANOVA kernel of degree n   
 def anova(X,Y,scale,xint,yint):
     K=kGA(X,Y,scale)[:int(xint),:int(yint)]
     return sum(K.diagonal().cumprod())
@@ -45,7 +46,12 @@ def AnovaKernelXY(X,Y,scale,xint,yint):
     return KSeq
 
 from sklearn.base import BaseEstimator, TransformerMixin
-#Class Bagkernelizer
+#Class ANOAkernelizer
+
+#    scale= scaling constant of the primary kernel funtion
+#    numfeatures = number of features per time point, for internal reshaping
+#    subsample = time series is subsampled to every subsample-th time point
+#    differences = whether first differences are taken or not
 class AnovaKernelizer(BaseEstimator, TransformerMixin):
     def __init__(self, X = np.zeros((1,2)), scale=1,V=True,
                  numfeatures = 2, subsample = 1, differences =True
@@ -82,7 +88,7 @@ class AnovaKernelizer(BaseEstimator, TransformerMixin):
 
 from sklearn import svm
 from sklearn.pipeline import Pipeline
-##pipeline:TGA kernel with SVC
+##pipeline:Anova kernel with SVC
 AnovaSVCpipeline=Pipeline([
 
     ('AnovaKernelizer', AnovaKernelizer()),
