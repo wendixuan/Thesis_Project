@@ -18,7 +18,7 @@ from sklearn.metrics import accuracy_score
 import time
 
 #Load and reshape data set
-file=open('./ae.train.cur')
+file=open('./ae')
 t=0
 d={}
 tmp=[]
