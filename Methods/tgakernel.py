@@ -48,12 +48,12 @@ from sklearn.base import BaseEstimator, TransformerMixin
 
 # parameters:
 
-#   kernel = name of the kernel used: linear, Gauss, Laplace, poly
+
 #   sigma = scaling constant of the primary kernel funtion
 #    numfeatures = number of features per time point, for internal reshaping
 #    subsample = time series is subsampled to every subsample-th time point
 #    differences = whether first differences are taken or not
-#    triangular= parametere T which decide the alignment 
+#    triangular= parameters T which decide the alignment 
 
 class TGAKernelizer(BaseEstimator, TransformerMixin):
     def __init__(self,sigma=0.1,triangular=0.25, X = np.zeros((1,2)), 
